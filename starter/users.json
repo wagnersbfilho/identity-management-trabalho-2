@@ -1,0 +1,31 @@
+{
+  "_comment": "User database for SGI assignments. Passwords are bcrypt hashed.",
+  "_passwords": {
+    "alice": "password123",
+    "bob": "secret456",
+    "carol": "test789"
+  },
+  "users": [
+    {
+      "id": "local-1",
+      "username": "alice",
+      "passwordHash": "$2a$10$mKD5TxS/HzRSZfABRlLz/eKIz18WsamcMbBwq5BbZQ.5e0wqvA4vG",
+      "displayName": "Alice Smith",
+      "email": "alice@example.com"
+    },
+    {
+      "id": "local-2",
+      "username": "bob",
+      "passwordHash": "$2a$10$0JxjvvMgE1OlFUuz0LfrnOcRy9OY78/TIwO1trPj3hpvyaUYnT4/i",
+      "displayName": "Bob Jones",
+      "email": "bob@example.com"
+    },
+    {
+      "id": "local-3",
+      "username": "carol",
+      "passwordHash": "$2a$10$o5hCETT4bmT0tvU1XcX6ZujwCDDfRNb8gukA87cmgqH1R3GF5joyW",
+      "displayName": "Carol White",
+      "email": "carol@example.com"
+    }
+  ]
+}

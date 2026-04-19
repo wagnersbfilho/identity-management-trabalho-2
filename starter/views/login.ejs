@@ -1,0 +1,52 @@
+s<%- include('layout', { body: `
+<div class="card">
+    <h1>Login</h1>
+
+    ${typeof error !== 'undefined' && error ? `
+        <div class="alert alert-error">
+            ${error === 'invalid_credentials' ? 'Invalid username or password.' : error}
+        </div>
+    ` : ''}
+
+    <h2>Local Authentication</h2>
+    <form action="/login/local" method="POST">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login with Password</button>
+    </form>
+
+    <div class="divider"><span>or use single sign-on</span></div>
+
+    <div class="auth-buttons">
+        <!-- SAML login button (Assignment 2) -->
+        <a href="/login/saml" class="btn btn-saml" style="opacity: 0.5; pointer-events: none;">
+            Login with SAML (Not Implemented)
+        </a>
+
+        <!-- Google login button (Assignment 3) -->
+        <a href="/login/google" class="btn btn-google" style="opacity: 0.5; pointer-events: none;">
+            Login with Google (Not Implemented)
+        </a>
+
+        <!-- VC login button (Assignment 4) -->
+        <a href="/login/vc" class="btn btn-vc" style="opacity: 0.5; pointer-events: none;">
+            Login with Verifiable Credential (Not Implemented)
+        </a>
+    </div>
+
+    <div class="info-box" style="margin-top: 20px;">
+        <strong>Test Accounts:</strong>
+        <ul style="margin: 10px 0 0 20px;">
+            <li>Username: <code>alice</code>, Password: <code>password123</code></li>
+            <li>Username: <code>bob</code>, Password: <code>secret456</code></li>
+            <li>Username: <code>carol</code>, Password: <code>test789</code></li>
+        </ul>
+    </div>
+</div>
+` }) %>

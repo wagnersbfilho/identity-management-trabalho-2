@@ -1,0 +1,67 @@
+<%- include('layout', { body: `
+<div class="card">
+    <h1>User Profile</h1>
+
+    <div class="alert alert-success">
+        You are successfully authenticated!
+    </div>
+
+    <div class="user-info">
+        <dl>
+            <dt>Display Name</dt>
+            <dd>${user.displayName}</dd>
+
+            <dt>Username / ID</dt>
+            <dd>${user.username || user.id}</dd>
+
+            <dt>Email</dt>
+            <dd>${user.email || 'Not provided'}</dd>
+
+            <dt>Authentication Method</dt>
+            <dd>
+                <span class="badge badge-${user.authMethod}">
+                    ${user.authMethod === 'local' ? 'Local (Password)' :
+                      user.authMethod === 'saml' ? 'SAML SSO' :
+                      user.authMethod === 'google' ? 'Google OIDC' :
+                      user.authMethod === 'vc' ? 'Verifiable Credential' :
+                      user.authMethod}
+                </span>
+            </dd>
+
+            ${user.issuer ? `
+                <dt>Identity Provider</dt>
+                <dd>${user.issuer}</dd>
+            ` : ''}
+
+            ${user.nameID ? `
+                <dt>SAML Name ID</dt>
+                <dd>${user.nameID}</dd>
+            ` : ''}
+
+            ${user.googleId ? `
+                <dt>Google ID</dt>
+                <dd>${user.googleId}</dd>
+            ` : ''}
+
+            ${user.vcIssuer ? `
+                <dt>VC Issuer</dt>
+                <dd>${user.vcIssuer}</dd>
+            ` : ''}
+        </dl>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a href="/logout" class="btn btn-danger">Logout</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Session Information</h2>
+    <p>This section shows technical details about your authentication session.</p>
+
+    <div class="info-box">
+        <strong>User Object (from session):</strong>
+        <pre style="margin-top: 10px; white-space: pre-wrap; word-break: break-all;">${JSON.stringify(user, null, 2)}</pre>
+    </div>
+</div>
+` }) %>

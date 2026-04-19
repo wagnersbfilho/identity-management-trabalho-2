@@ -1,0 +1,20 @@
+{
+  "name": "sgi-webapp",
+  "version": "1.0.0",
+  "description": "Express web application for SGI assignments",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "NODE_ENV=development node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.9"
+  },
+  "keywords": ["authentication", "saml", "oidc", "passport"],
+  "license": "MIT"
+}

@@ -1,0 +1,38 @@
+<%- include('layout', { body: `
+<div class="card">
+    <h1>Welcome to SGI App</h1>
+    <p>This is a demonstration application for the Identity Management Systems (SGI) course.</p>
+
+    <div class="info-box">
+        <strong>Available Authentication Methods:</strong>
+        <ul style="margin: 10px 0 0 20px;">
+            <li><strong>Local</strong> - Username and password</li>
+            <li><strong>SAML</strong> - Enterprise single sign-on (Assignment 2)</li>
+            <li><strong>Google</strong> - OAuth 2.0 / OpenID Connect (Assignment 3)</li>
+            <li><strong>Verifiable Credentials</strong> - Decentralized identity (Assignment 4)</li>
+        </ul>
+    </div>
+
+    ${isAuthenticated ? `
+        <p>You are logged in as <strong>${user.displayName}</strong>.</p>
+        <a href="/profile" class="btn btn-primary">View Profile</a>
+    ` : `
+        <p>Please log in to access protected resources.</p>
+        <a href="/login" class="btn btn-primary">Login</a>
+    `}
+</div>
+
+<div class="card">
+    <h2>About This Application</h2>
+    <p>This Express.js application demonstrates multiple authentication strategies:</p>
+
+    <h3>Assignment 2: SAML</h3>
+    <p>Add SAML Service Provider functionality using passport-saml to enable single sign-on with an enterprise Identity Provider.</p>
+
+    <h3>Assignment 3: OpenID Connect</h3>
+    <p>Add Google Sign-In using passport-google-oauth20 to enable authentication via OAuth 2.0 / OIDC.</p>
+
+    <h3>Assignment 4: Verifiable Credentials</h3>
+    <p>Add Verifiable Credential verification to enable decentralized identity authentication.</p>
+</div>
+` }) %>
