@@ -97,6 +97,9 @@ passport.serializeUser((user, done) => {
     authMethod: user.authMethod,
     // Para utilizadores SAML, guardar dados adicionais necessários para logout
     nameID: user.nameID,
+    displayName: user.displayName,
+    email: user.email,
+    username: user.username,
     nameIDFormat: user.nameIDFormat
   });
 });
@@ -107,10 +110,10 @@ passport.deserializeUser((sessionUser, done) => {
   // Para utilizadores SAML, reconstruir a partir dos dados da sessão
   if (sessionUser.authMethod === 'saml') {
     done(null, {
-      id: sessionUser.id,
-      username: sessionUser.id.replace('saml-', ''),
-      displayName: sessionUser.id.replace('saml-', ''),
-      email: sessionUser.id.replace('saml-', ''),
+      id: sessionUser.id.replace('saml-', ''),
+      username: sessionUser.username,
+      displayName: sessionUser.displayName,
+      email: sessionUser.email,
       nameID: sessionUser.nameID,
       nameIDFormat: sessionUser.nameIDFormat,
       authMethod: 'saml'
@@ -190,7 +193,7 @@ passport.use('saml', new SamlStrategy(
       // Criar objeto de utilizador para a sessão
       const user = {
         id: 'saml-' + profile.nameID,
-        username: profile.nameID,
+        username: profile.uid,
         displayName: profile.displayName ||
             profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] ||
             profile.nameID,
@@ -203,6 +206,7 @@ passport.use('saml', new SamlStrategy(
         issuer: profile.issuer,
         authMethod: 'saml'
       };
+      //console.log('User:', user);
       return done(null, user);
     }
 ));
