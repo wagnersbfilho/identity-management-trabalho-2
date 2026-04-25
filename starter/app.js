@@ -144,8 +144,11 @@ passport.deserializeUser((sessionUser, done) => {
 const samlConfig = {
   // Configuração do IdP
   entryPoint: 'https://saml.jcraveiro.com/saml2/idp/SSOService.php',
+  logoutUrl: 'https://saml.jcraveiro.com/saml2/idp/SingleLogoutService.php',
+
   issuer: 'http://localhost:3000/a22511360', // Substitua pelo seu número de aluno
   callbackUrl: 'http://localhost:3000/login/saml/callback',
+  logoutCallbackUrl: 'http://localhost:3000/logout/saml/callback',
 
   // Certificado do IdP (para validação de assinatura)
   idpCert: `-----BEGIN CERTIFICATE-----
@@ -313,14 +316,28 @@ app.get('/profile', ensureAuthenticated, (req, res) => {
 });
 
 // Logout
-app.get('/logout', (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      console.error('Logout error:', err);
-    }
-    req.session.destroy();
-    res.redirect('/');
-  });
+app.get('/logout', (req, res, next) => {
+  if (req.isAuthenticated() && req.user.authMethod === 'saml') {
+    const samlStrategy = passport._strategy('saml');
+    samlStrategy.logout(req, (err, logoutUrl) => {
+      if (err) return next(err);
+      req.logout((err) => {
+        if (err) console.error(err);
+        req.session.destroy();
+        res.redirect(logoutUrl);
+      });
+    });
+  } else {
+    req.logout((err) => {
+      if (err) console.error(err);
+      req.session.destroy();
+      res.redirect('/');
+    });
+  }
+});
+
+app.get('/logout/saml/callback', (req, res) => {
+  res.redirect('/');
 });
 
 // =============================================================================
