@@ -43,6 +43,11 @@
                 <dd>${user.googleId}</dd>
             ` : ''}
 
+            ${user.picture ? `
+                <dt>Google Picture</dt>
+                <dd><img src="${user.picture}" alt="Foto de Perfil" style="width: 80px; height: 80px; border-radius: 50%;"></dd>
+            ` : ''}
+
             ${user.vcIssuer ? `
                 <dt>VC Issuer</dt>
                 <dd>${user.vcIssuer}</dd>

@@ -100,7 +100,9 @@ passport.serializeUser((user, done) => {
     displayName: user.displayName,
     email: user.email,
     username: user.username,
-    nameIDFormat: user.nameIDFormat
+    nameIDFormat: user.nameIDFormat,
+    picture: user.picture,
+    googleId: user.googleId
   });
 });
 
@@ -120,6 +122,17 @@ passport.deserializeUser((sessionUser, done) => {
     });
 
   // Para utilizadores locais, procurar na base de dados
+  } else if (sessionUser.authMethod === 'google') {
+    done(null, {
+      id: sessionUser.id.replace('google-', ''),
+      username: sessionUser.username,
+      displayName: sessionUser.displayName,
+      email: sessionUser.email,
+      picture: sessionUser.picture,
+      googleId: sessionUser.googleId,
+      authMethod: 'google'
+    });
+
   } else {
     const user = users.users.find(u => u.id === sessionUser.id);
     if (user) {
@@ -215,6 +228,37 @@ passport.use('saml', new SamlStrategy(
 ));
 
 // =============================================================================
+// Passport Configuration - OAUTH / OIDC Strategy
+// =============================================================================
+require('dotenv').config();
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+// Configuração OAuth2.0 / OIDC do Google
+passport.use('google', new GoogleStrategy({
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: 'http://localhost:3000/login/google/callback',
+      scope:['openid', 'profile', 'email']
+    },
+    (accessToken,refreshToken, profile, done) =>{
+      //Esta função é chamada após autenticação Google bem-sucedida
+      console.log('Perfil Google:', JSON.stringify(profile, null, 2));
+
+      //Criar objeto de utilizador para a sessão
+      const user = {
+        id: 'google-' + profile.id,
+        username:profile.emails[0].value,
+        displayName:profile.displayName,
+        email: profile.emails[0].value,
+        picture: profile.photos[0]?.value,
+        googleId:profile.id,
+        authMethod: 'google'
+      };
+      return done(null, user);
+    }
+));
+
+// =============================================================================
 // Helper Middleware
 // =============================================================================
 
@@ -293,11 +337,26 @@ app.get('/metadata.xml', (req, res) => {
 });
 
 // =============================================================================
-// TODO: Add Google OAuth Routes Here (Assignment 3)
+// Google OAuth Routes Here (Assignment 3)
 // =============================================================================
-//
-// You will add Google authentication in Assignment 3.
-// Routes needed: GET /login/google, GET /login/google/callback
+
+// Iniciar autenticação Google
+app.get('/login/google',
+    passport.authenticate('google', {
+      scope: ['openid', 'profile', 'email']
+    })
+);
+
+// Callback do Google
+app.get('/login/google/callback',
+    passport.authenticate('google', {
+      failureRedirect: '/login?error=google_failed'
+    }),
+    (req, res) => {
+      // Autenticação bem-sucedida
+      res.redirect('/profile');
+    }
+);
 
 // =============================================================================
 // TODO: Add Verifiable Credential Routes Here (Assignment 4)
