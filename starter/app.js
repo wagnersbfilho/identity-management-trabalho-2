@@ -343,7 +343,8 @@ app.get('/metadata.xml', (req, res) => {
 // Iniciar autenticação Google
 app.get('/login/google',
     passport.authenticate('google', {
-      scope: ['openid', 'profile', 'email']
+      scope: ['openid', 'profile', 'email'],
+      prompt: 'select_account'
     })
 );
 
