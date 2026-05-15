@@ -94,3 +94,82 @@ Utilizador 	    ServiceProvider(SP)     IdentityProvider(IdP)
   - Funcionalidade de logout SAML não estava inicialmente implementada.  
   - Implementação posterior com apoio do professor.  
   - Necessidade de compreender o fluxo de Single Logout (SLO) no contexto do SAML.  
+
+---
+## Etapa 2: Autenticação OpenID Connect via Google
+
+#### Visão Geral
+
+Implementação do **Google Sign-In** (OAuth 2.0 / OpenID Connect) permitindo que os utilizadores se autentiquem com as suas contas Google.
+
+#### Objetivos:
+
+- Implementar o fluxo authorization code do OAuth 2.0
+- Configurar credenciais OAuth 2.0 no **Google Cloud Console**
+- Processar tokens OIDC e dados de perfil do utilizador
+- Suportar múltiplos métodos de autenticação numa aplicação
+
+#### Configuração: Google Cloud Console
+1. Criar um Projeto
+   - Vá ao [Google Cloud Console](https://console.cloud.google.com/)
+   - Clique em “Select a project” → “New Project”
+   - Introduza o nome do projeto: SGI Trabalho 3
+   - Clique em Create
+2. Configurar o Ecrã de Consentimento OAuth
+   - Selecione tipo de utilizador External
+   - Preencha os campos obrigatórios:
+     - App name: SGI Trabalho 3
+     - User support email: conta Gmail
+   - Clique em Save and Continue
+   - Adicione scopes: email, profile, openid
+   - Clique em Save and Continue
+3. Criar Credenciais OAuth 2.0
+   - Vá a APIs & Services → Credentials
+   - Clique em Create Credentials → OAuth client ID
+   - Tipo de aplicação: Web application
+   - Nome: SGI Web App
+   - Authorized redirect URIs:
+   - Adicione: http://localhost:3000/login/google/callback
+   - Clique em Create
+   - Guardar o Client ID e Client Secret em lugar seguro
+   
+#### Descrição do Fluxo OAuth 2.0/OIDC
+```
+Utilizador        SGI Web                 Google Identity           Google APIs
+(Client)          (OAuth Client)          Authorization Server      Resource Server
+    |                    |                          |                       |
+    | 1. Login com Google|                          |                       |
+    |------------------->|                          |                       |
+    |                    |                          |                       |
+    | 2. Redirect para Google OAuth Consent Screen  |                       |
+    |---------------------------------------------->|                       |
+    |                    |                          |                       |
+    | 3. Utilizador autentica-se e dá consentimento |                       |
+    |<----------------------------------------------|                       |
+    |                    |                          |                       |
+    | 4. Redirect com authorization_code            |                       |
+    |---------------------------------------------->|                       |
+    |                    |                          |                       |
+    |                    | 5. Troca authorization_code por tokens           |
+    |                    |------------------------------------------------->|
+    |                    |                                                  |
+    |                    | 6. Recebe access_token + id_token + refresh_token|
+    |                    |<-------------------------------------------------|
+    |                    |                          |                       |
+    |                    | 7. Validar ID Token / obter perfil do utilizador |
+    |                    |----------------------------------------------->  |
+    |                    |                                                  |
+    |                    | 8. Dados do utilizador (email, profile, openid)  |
+    |                    |<-----------------------------------------------  |
+    |                    |                          |                       |
+    | 9. Sessão autenticada no SGI                  |                       |
+    |<-------------------|                          |                       |
+```
+#### Diretrizes segurança
+Criar ficheiro **.env** para armazenar o secret, e não fazer commit no GIT (incluir em *.gitignore*):
+```
+GOOGLE_CLIENT_ID=o-seu-client-id-aqui
+GOOGLE_CLIENT_SECRET=o-seu-client-secret-aqui
+SESSION_SECRET=uma-string-secreta-aleatoria
+```
+
