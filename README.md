@@ -153,10 +153,10 @@ Utilizador        SGI Web                 Google Identity           Google APIs
     |                    |<-------------------------|                       |
     |                    |                          |                       |
     |                    | 5. Troca authorization_code por access_token     |
-    |                    |------------------------------------------------->|
-    |                    |                                                  |
+    |                    |------------------------->|                       |
+    |                    |                          |                       |
     |                    | 6. Recebe access_token + id_token                |
-    |                    |<-------------------------------------------------|
+    |                    |<-------------------------|                       |
     |                    |                          |                       |
     |                    | 7. Validar ID Token / obter perfil do utilizador |
     |                    |------------------------------------------------->|
