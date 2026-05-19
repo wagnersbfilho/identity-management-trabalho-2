@@ -141,23 +141,25 @@ Utilizador        SGI Web                 Google Identity           Google APIs
     | 1. Login com Google|                          |                       |
     |------------------->|                          |                       |
     |                    |                          |                       |
-    | 2. Redirect para Google OAuth Consent Screen  |                       |
-    |---------------------------------------------->|                       |
+    |                    |  2. Redirect para Google |                       |
+    |                    |     OAuth Consent Screen |                       |
+    |                    |------------------------->|                       |
     |                    |                          |                       |
     | 3. Utilizador autentica-se e dá consentimento |                       |
-    |<----------------------------------------------|                       |
-    |                    |                          |                       |
-    | 4. Redirect com authorization_code            |                       |
     |---------------------------------------------->|                       |
     |                    |                          |                       |
-    |                    | 5. Troca authorization_code por tokens           |
+    |                    | 4. Redirect com          |                       |
+    |                    |    authorization_code    |                       |
+    |                    |<-------------------------|                       |
+    |                    |                          |                       |
+    |                    | 5. Troca authorization_code por access_token     |
     |                    |------------------------------------------------->|
     |                    |                                                  |
-    |                    | 6. Recebe access_token + id_token + refresh_token|
+    |                    | 6. Recebe access_token + id_token                |
     |                    |<-------------------------------------------------|
     |                    |                          |                       |
     |                    | 7. Validar ID Token / obter perfil do utilizador |
-    |                    |----------------------------------------------->  |
+    |                    |------------------------------------------------->|
     |                    |                                                  |
     |                    | 8. Dados do utilizador (email, profile, openid)  |
     |                    |<-----------------------------------------------  |
